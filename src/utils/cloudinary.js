@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import fs from "fs"
+import { ApiError } from './ApiError.js';
 
 
     // Configuration
@@ -18,7 +19,7 @@ import fs from "fs"
                 resource_type: "auto"
             })
             //file has been succefully uploaded
-            // console.log("File is uploaded on cloudinary", response.url);
+            // console.log("File is uploaded on cloudinary", response.url)
             fs.unlinkSync(localFilePath)
             return response
 
@@ -28,5 +29,20 @@ import fs from "fs"
         }
     };
 
+    //delete an image
+    const deleteFromCloudinary = async (url,publicId)=>{
+        try {
+            if (!(url||publicId))  throw new ApiError(400,"url or id not found while dleting from cloudinary")
+            
+            const response = await cloudinary.uploader.destroy(publicId,
+                {resource_type: `${url.includes("image") ? "image": "video"}`}
+            )    
+            console.log("Asset deleted from Cloudinary:", response);
+        } catch (error) {
+            console.error("Error deleting asset from Cloudinary:", error);
+            throw new ApiError(500, error?.message || "Server error");
+        }
+    }
 
-export {uploadonCloudinary}
+
+export {uploadonCloudinary, deleteFromCloudinary}
