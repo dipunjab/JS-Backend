@@ -5,7 +5,6 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadonCloudinary , deleteFromCloudinary} from "../utils/cloudinary.js";
-import { refreshAccessToken } from "./user.controllers.js";
 
 const getAllVideos = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10, query, sortBy, sortType, userId, videoFile} = req.query
